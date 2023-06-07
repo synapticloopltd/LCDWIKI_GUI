@@ -28,26 +28,38 @@
 class LCDWIKI_GUI
 {
 	public:
-	LCDWIKI_GUI(void); // Constructor
+		LCDWIKI_GUI(void); // Constructor
 
-    //These are defined by the subclass:
-	virtual uint16_t Color_To_565(uint8_t r, uint8_t g, uint8_t b)=0;
-	virtual void Draw_Pixe(int16_t x, int16_t y, uint16_t color)=0;
-	virtual void Fill_Rect(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color)=0;
-	virtual void Set_Addr_Window(int16_t x1, int16_t y1, int16_t x2, int16_t y2)=0;
-	virtual void Push_Any_Color(uint16_t * block, int16_t n, bool first, uint8_t flags)=0;
-	virtual int16_t Read_GRAM(int16_t x, int16_t y, uint16_t *block, int16_t w, int16_t h)=0;
-	virtual int16_t Get_Height(void) const=0;
-  	virtual int16_t Get_Width(void) const=0;
+		//These are defined by the subclass:
+		virtual uint16_t Color_To_565(uint8_t r, uint8_t g, uint8_t b)=0;
+		virtual void Draw_Pixe(int16_t x, int16_t y, uint16_t color)=0;
+		virtual void Fill_Rect(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color)=0;
+		virtual void Set_Addr_Window(int16_t x1, int16_t y1, int16_t x2, int16_t y2)=0;
+		virtual void Push_Any_Color(uint16_t * block, int16_t n, bool first, uint8_t flags)=0;
+
+		virtual void Push_Same_Color(uint16_t color, uint16_t n, bool first)=0;
+
+		virtual void Push_Compressed_Image(int16_t x, int16_t y, uint16_t *block, uint8_t flags)=0;
+		virtual void Push_Indexed_Image(int16_t x, int16_t y, uint8_t *block, uint8_t flags)=0;
+
+		// virtual void Push_Same_Color(uint16_t color, int16_t n, bool first, uint8_t flags)=0;
+		// virtual void Push_Compressed_Image(int16_t x, int16_t y, uint16_t *block, uint8_t flags)=0;
+		// virtual void Push_Indexed_Image(int16_t x, int16_t y, uint16_t *block, uint8_t flags)=0;
+		virtual int16_t Read_GRAM(int16_t x, int16_t y, uint16_t *block, int16_t w, int16_t h)=0;
+		virtual int16_t Get_Height(void) const=0;
+		virtual int16_t Get_Width(void) const=0;
 
 	//These exist only with LCDWIKI_GUI(no subclass overrides)
 	void Set_Draw_color(uint16_t color);
 	void Set_Draw_color(uint8_t r, uint8_t g, uint8_t b);
 	uint16_t Get_Draw_color(void) const;
 	void Draw_Pixel(int16_t x, int16_t y);
+	void Draw_Pixel(int16_t x, int16_t y, uint16_t color);
 	uint16_t Read_Pixel(int16_t x, int16_t y);
 	void Draw_Fast_VLine(int16_t x, int16_t y, int16_t h);
 	void Draw_Fast_HLine(int16_t x, int16_t y, int16_t w);
+	void Draw_Faster_HLine(int16_t x, int16_t y, int16_t w);
+
 	void Fill_Screen(uint16_t color);
 	void Fill_Screen(uint8_t r, uint8_t g, uint8_t b);
 	void Draw_Line(int16_t x1, int16_t y1, int16_t x2, int16_t y2);
@@ -81,7 +93,7 @@ class LCDWIKI_GUI
 	void Print_String(String st, int16_t x, int16_t y);
 	void Print_Number_Int(long num, int16_t x, int16_t y, int16_t length, uint8_t filler, int16_t system);
 	void Print_Number_Float(double num, uint8_t dec, int16_t x, int16_t y, uint8_t divider, int16_t length, uint8_t filler);
-    void Draw_Char(int16_t x, int16_t y, uint8_t c, uint16_t color,uint16_t bg, uint8_t size, boolean mode);
+	void Draw_Char(int16_t x, int16_t y, uint8_t c, uint16_t color,uint16_t bg, uint8_t size, boolean mode);
 	size_t write(uint8_t c);
 	int16_t Get_Display_Width(void) const;
 	int16_t Get_Display_Height(void) const; 

@@ -90,19 +90,23 @@ void LCDWIKI_GUI::Draw_Fast_HLine(int16_t x, int16_t y, int16_t w) {
 	Fill_Rect(x, y, w, 1, draw_color);
 }
 
-// draw a horizontal line
-void LCDWIKI_GUI::Draw_Faster_HLine(int16_t x, int16_t y, int16_t w) {
-	// TODO - rotation
-	Set_Addr_Window(x, y, x + w - 1, y);
-	Push_Same_Color(draw_color, w, 1);
-}
-
-//Fill the full screen with color
+/*!
+ * @brief Fill the screen with a colour in 16 bit (rgb565) format
+ * 
+ * @param color The rgb565 colour 
+ */ 
 void LCDWIKI_GUI::Fill_Screen(uint16_t color) {
 	Fill_Rect(0, 0, Get_Width(), Get_Height(), color);
 }
 
-//Fill the full screen with r,g,b
+/*!
+ * @brief Fill the screen with a colour in RGB format - 8 bits for each.  NOTE:
+ *   the 24 bits of colour is converted into rgb565 format
+ * 
+ * @param r The red component
+ * @param g The green component
+ * @param b The blue component
+ */ 
 void LCDWIKI_GUI::Fill_Screen(uint8_t r, uint8_t g, uint8_t b) {
 	uint16_t color = Color_To_565(r, g, b);
 	Fill_Rect(0, 0, Get_Width(), Get_Height(), color);
@@ -111,6 +115,7 @@ void LCDWIKI_GUI::Fill_Screen(uint8_t r, uint8_t g, uint8_t b) {
 //draw an arbitrary line from (x1,y1) to (x2,y2)
 void LCDWIKI_GUI::Draw_Line(int16_t x1, int16_t y1, int16_t x2, int16_t y2) {
 	int16_t steep = abs(y2 - y1) > abs(x2 - x1); 
+
 	if (steep) {
 		swap(x1, y1);
 		swap(x2, y2);

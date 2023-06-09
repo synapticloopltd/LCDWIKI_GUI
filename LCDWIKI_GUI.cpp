@@ -423,50 +423,122 @@ void LCDWIKI_GUI::Draw_Bit_Map(int16_t x, int16_t y, int16_t sx, int16_t sy, con
 	}
 }
 
-//set text coordinate
+/*!
+ * @brief Set the coordinates for the text cursor
+ * 
+ * @param x the x coordinate
+ * @param y the y coordinate
+ * 
+ * @deprecated Use the properly spelled Set_Text_Cursor(int16_t x, int16_t y)
+ */
 void LCDWIKI_GUI::Set_Text_Cousur(int16_t x, int16_t y) {
+	Set_Text_Cursor(x, y);
+}
+
+/*!
+ * @brief Set the coordinates for the text cursor
+ * 
+ * @param x the x coordinate
+ * @param y the y coordinate
+ */
+void LCDWIKI_GUI::Set_Text_Cursor(int16_t x, int16_t y) {
 	text_x = x;
 	text_y = y;
 }
 
-//get text x coordinate
+/*!
+ * @brief Get the x coordinate of the currently set text cursor
+ * 
+ * @return The x coordinate of the currently set text cursor
+ * 
+ * @deprecated Use the properly spelled Get_Text_X_Cursor() call instead
+ */
+
 int16_t LCDWIKI_GUI::Get_Text_X_Cousur(void) const {
+	return(Get_Text_X_Cursor());
+}
+
+/*!
+ * @brief Get the x coordinate of the currently set text cursor
+ * 
+ * @return The x coordinate of the currently set text cursor
+ */
+int16_t LCDWIKI_GUI::Get_Text_X_Cursor(void) const {
 	return text_x;
 }
 
-//get text y coordinate
+
+/*!
+ * @brief Get the y coordinate of the currently set text cursor
+ * 
+ * @return The y coordinate of the currently set text cursor
+ * 
+ * @deprecated Use the properly spelled Get_Text_Y_Cursor() call instead
+ */
 int16_t LCDWIKI_GUI::Get_Text_Y_Cousur(void) const {
+	return(Get_Text_Y_Cursor());
+}
+
+/*!
+ * @brief Get the y coordinate of the currently set text cursor
+ * 
+ * @return The y coordinate of the currently set text cursor
+ */
+int16_t LCDWIKI_GUI::Get_Text_Y_Cursor(void) const {
 	return text_y;
 }
 
 //set text colour with 16bit color
 void LCDWIKI_GUI::Set_Text_colour(uint16_t color) {
+	Set_Text_Color(color);
+}
+
+void LCDWIKI_GUI::Set_Text_Color(uint16_t color) {
 	text_color = color;
 }
 
 //set text colour with 8bits r,g,b
 void LCDWIKI_GUI::Set_Text_colour(uint8_t r, uint8_t g, uint8_t b) {
+	Set_Text_Color(r, g, b);
+}
+
+void LCDWIKI_GUI::Set_Text_Color(uint8_t r, uint8_t g, uint8_t b) {
 	text_color = Color_To_565(r, g, b);
 }
 
 //get text colour
 uint16_t LCDWIKI_GUI::Get_Text_colour(void) const {
+	return Get_Text_Color();
+}
+
+uint16_t LCDWIKI_GUI::Get_Text_Color(void) const {
 	return text_color;
 }
 
 //set text background colour with 16bits color
-void LCDWIKI_GUI::Set_Text_Back_colour(uint16_t color)
-{
+void LCDWIKI_GUI::Set_Text_Back_colour(uint16_t color) {
+	Set_Text_Back_Color(color);
+}
+
+void LCDWIKI_GUI::Set_Text_Back_Color(uint16_t color) {
 	text_bgcolor = color;	
 }
 
 //set text background colour with 8bits r,g,b
 void LCDWIKI_GUI::Set_Text_Back_colour(uint8_t r, uint8_t g, uint8_t b) {
+	Set_Text_Back_Color(r, g, b);
+}
+
+void LCDWIKI_GUI::Set_Text_Back_Color(uint8_t r, uint8_t g, uint8_t b) {
 	text_bgcolor = Color_To_565(r, g, b);
 }
 
 //get text background colour
 uint16_t LCDWIKI_GUI::Get_Text_Back_colour(void) const {
+	return Get_Text_Back_Color();
+}
+
+uint16_t LCDWIKI_GUI::Get_Text_Back_Color(void) const {
 	return text_bgcolor;
 }
 
@@ -491,7 +563,7 @@ boolean LCDWIKI_GUI::Get_Text_Mode(void) const {
 }
 
 //draw a char
-void LCDWIKI_GUI::Draw_Char(int16_t x, int16_t y, uint8_t c, uint16_t color,uint16_t bg, uint8_t size, boolean mode) {
+void LCDWIKI_GUI::Draw_Char(int16_t x, int16_t y, uint8_t c, uint16_t color, uint16_t bg, uint8_t size, boolean mode) {
 	if((x >= Get_Width()) || (y >= Get_Height()) || ((x + 6 * size - 1) < 0) || ((y + 8 * size - 1) < 0)) {
 		return;
 	}
@@ -546,7 +618,7 @@ size_t LCDWIKI_GUI::Print(uint8_t *st, int16_t x, int16_t y) {
 		}
 	}
 
-	Set_Text_Cousur(x, y);
+	Set_Text_Cursor(x, y);
 
 	while(1) {
 		unsigned char ch = *(p++);//pgm_read_byte(p++);
@@ -635,19 +707,33 @@ void LCDWIKI_GUI::Print_Number_Int(long num, int16_t x, int16_t y, int16_t lengt
 	Print(st, x, y);
 }
 
-//print float number
+/*!
+ * @brief Print a floating point number to the display. This will print between
+ *   1 to 5 (inclusive) decimal points.  If the decimal points are set outside
+ *   of this - they will be reset to the closest bound
+ * 
+ * @param num The number to print
+ * @param dec The numbe of decimal places (__MUST__ be between 1 and 5)
+ * @param x The x coordinate to print it to
+ * @param y The y coordinate to print it to
+ * @param divider The character between the number and decimal places 
+ *    (i.e. '.' or ',' or something else)
+ * @param length The number of characters to print before the decimal point
+ * @param filler What to pad the remaining characters with
+ */
 void LCDWIKI_GUI::Print_Number_Float(double num, uint8_t dec, int16_t x, int16_t y, uint8_t divider, int16_t length, uint8_t filler) {
 	uint8_t st[27] = {0};
 	uint8_t * p = st;
 	boolean flag = false;
 	int16_t i = 0;
-	if(dec<1) {
-		dec=1;
+
+	if(dec < 1) {
+		dec = 1;
 	} else if(dec > 5) {
-		dec=5;
+		dec = 5;
 	}
 
-	if(num<0) {
+	if(num < 0) {
 		flag = true;
 	}
 
@@ -685,25 +771,73 @@ void LCDWIKI_GUI::Print_Number_Float(double num, uint8_t dec, int16_t x, int16_t
 	Print(st, x, y);
 }
 
-//write a char
-size_t LCDWIKI_GUI::write(uint8_t c)  {
+/*!
+ * @brief Write a character to the screen, if it is a new line, increment the 
+ *   row and go back to the beginning of the column.  
+ * 
+ * @param c The character to write to the screen
+ * 
+ * @return Always returns 1
+ * 
+ * @deprecated - Use Write() method instead
+ */
+
+size_t LCDWIKI_GUI::write(uint8_t c) {
 	if (c == '\n') {
 		text_y += text_size*8;
 		text_x  = 0;
 	} else if(c == '\r') {
-	} else  {
-		Draw_Char(text_x, text_y, c, text_color, text_bgcolor, text_size,text_mode);
-		text_x += text_size*6;		
+	} else {
+		Draw_Char(text_x, text_y, c, text_color, text_bgcolor, text_size, text_mode);
+		text_x += text_size * 6;
 	}
 	return 1;	
 }
 
-//get lcd width
-int16_t LCDWIKI_GUI::Get_Display_Width(void) const {
+/*!
+ * @brief Write a character to the screen, if it is a new line, increment the 
+ *   row and go back to the beginning of the column.  Under the hood, this 
+ *   checks the row and column of the text and updates where necessary and 
+ *   then calls Draw_Char() at the appropriate location
+ * 
+ * @param c The character to write to the screen
+ */
+void LCDWIKI_GUI::Write(uint8_t c) {
+		if(text_x + (text_size * 6) > Get_Width()) {
+			text_x = 0;
+			text_y += text_size * 8;
+		}
+
+		if(text_y + (text_size * 8) > Get_Height()) {
+			text_y = 0;
+		}
+
+	if (c == '\n') {
+		Serial.println(c);
+		text_y += text_size * 8;
+		text_x = 0;
+	} else if(c == '\r') {
+	} else {
+		Draw_Char(text_x, text_y, c, text_color, text_bgcolor, text_size, text_mode);
+		text_x += text_size * 6;
+	}
+}
+
+/*!
+ * @brief Get the width of the display
+ * 
+ * @return The width of the display
+ */
+
+int16_t LCDWIKI_GUI::Get_Display_Width() const {
 	return Get_Width();
 }
 
-//get lcd height 
-int16_t LCDWIKI_GUI::Get_Display_Height(void) const {
+/*!
+ * @brief Get the height of the window
+ *
+ * @return The height of the window
+ */
+int16_t LCDWIKI_GUI::Get_Display_Height() const {
 	return Get_Height();
 }
